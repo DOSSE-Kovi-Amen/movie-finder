@@ -1,11 +1,12 @@
 "use client";
 import { useEffect, useState } from "react";
-import Header from "@/components/Header";
 import MovieCard from "@/components/MovieCard";
 import { useFilter } from "@/context/FilterContext";
+import Header2 from "@/components/Header2";
+import SearchBar from "@/components/SearchBar";
 
 async function fetchMovies(genre: string, year: string, page: number) {
-  const url = `https://www.omdbapi.com/?s=${genre || 'action'}&y=${year || ''}&page=${page}&apikey=19fffcc4`;
+  const url = `https://www.omdbapi.com/?s=${genre || 'action'}&y=${year || ''}&type=series&page=${page}&apikey=19fffcc4`;
   const res = await fetch(url);
   const data = await res.json();
   return data.Search || [];
@@ -30,10 +31,14 @@ export default function Home() {
 
   return (
     <div>
-      <Header />
+      <Header2 />
       <div className="relative bg-gray-900 text-white border-t-4 border-red-500">
-        <div className="container mx-auto px-4 py-10">
-          <h1 className="text-2xl font-bold text-center mb-6">Liste des films et séries</h1>
+        <div className="container mx-auto px-4 py-10 mt-10">
+          <div className="my-5">
+          <SearchBar />
+
+          </div>
+          <h1 className="text-2xl font-bold text-center mb-6">Total de séries pour la page {movies.length}</h1>
 
           {/* Filtres */}
           <div className="flex justify-center space-x-4 mb-6">
