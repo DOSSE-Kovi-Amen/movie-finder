@@ -9,7 +9,6 @@ import SearchBar from "./SearchBar";
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
-  const [query, setQuery] = useState("");
 
   // Effet de défilement pour changer le background du menu
   const handleScroll = () => {

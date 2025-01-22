@@ -1,15 +1,11 @@
 "use client";
 
-import Image from "next/image";
 import { useState } from "react";
-import { motion } from "framer-motion";
 import Menu from "./Menu";
 import Link from "next/link";
-import SearchBar from "./SearchBar";
 
 export default function Header2() {
   const [isScrolled, setIsScrolled] = useState(false);
-  const [query, setQuery] = useState("");
 
   // Effet de défilement pour changer le background du menu
   const handleScroll = () => {

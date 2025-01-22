@@ -1,8 +1,11 @@
 "use client";
+import { Movie } from "@/types/movie";
 import Image from "next/image";
 import Link from "next/link";
 
-export default function MovieCard({ movie }: any) {
+export default function MovieCard({ movie }: {
+  movie: Movie;
+}) {
   return (
     <Link href={`/film/${movie.imdbID}`} passHref>
 

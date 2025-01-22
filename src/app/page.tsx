@@ -3,9 +3,10 @@ import { useEffect, useState } from "react";
 import Header from "@/components/Header";
 import MovieCard from "@/components/MovieCard";
 import { useFilter } from "@/context/FilterContext";
+import { Movie } from "@/types/movie";
 
 async function fetchMovies(genre: string, year: string, page: number) {
-  const url = `https://www.omdbapi.com/?s=${genre || 'action'}&y=${year || ''}&page=${page}&apikey=19fffcc4`;
+  const url = `https://www.omdbapi.com/?s=${genre || "action"}&y=${year || ""}&page=${page}&apikey=19fffcc4`;
   const res = await fetch(url);
   const data = await res.json();
   return data.Search || [];
@@ -13,9 +14,10 @@ async function fetchMovies(genre: string, year: string, page: number) {
 
 export default function Home() {
   const { genre, year, setGenre, setYear } = useFilter(); // Correct usage of useFilter
-  const [movies, setMovies] = useState([]);
+  const [movies, setMovies] = useState([]); 
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+
   // Crée une liste d'années de 1940 à 2025
   const years = Array.from({ length: 2025 - 1940 + 1 }, (_, i) => 1940 + i);
 
@@ -23,8 +25,13 @@ export default function Home() {
     const getMovies = async () => {
       const fetchedMovies = await fetchMovies(genre, year, currentPage);
       setMovies(fetchedMovies);
-      setTotalPages(8); // Simulate pagination - adjust as needed
+
+      // Si l'API renvoie une réponse avec un nombre total de résultats
+      // Utiliser un calcul pour la pagination
+      const totalResults = 80; // Remplacer par la réponse réelle de l'API si disponible
+      setTotalPages(Math.ceil(totalResults / 10)); // Assuming 10 results per page
     };
+
     getMovies();
   }, [genre, year, currentPage]);
 
@@ -64,9 +71,13 @@ export default function Home() {
 
           {/* Liste des films */}
           <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-5 gap-6">
-            {movies.map((movie: any) => (
-              <MovieCard key={movie.imdbID} movie={movie} />
-            ))}
+            {movies.length === 0 ? (
+              <p className="text-white text-center">Aucun film trouvé</p>
+            ) : (
+              movies.map((movie: Movie) => (
+                <MovieCard key={movie.imdbID} movie={movie} />
+              ))
+            )}
           </div>
 
           {/* Pagination */}

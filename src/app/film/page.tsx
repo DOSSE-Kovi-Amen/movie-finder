@@ -4,6 +4,7 @@ import MovieCard from "@/components/MovieCard";
 import { useFilter } from "@/context/FilterContext";
 import Header2 from "@/components/Header2";
 import SearchBar from "@/components/SearchBar";
+import { Movie } from "@/types/movie";
 
 async function fetchMovies(genre: string, year: string, page: number) {
   const url = `https://www.omdbapi.com/?s=${genre || 'action'}&y=${year || ''}&type=movie&page=${page}&apikey=19fffcc4`;
@@ -71,7 +72,7 @@ export default function Home() {
 
           {/* Liste des films */}
           <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-5 gap-6">
-            {movies.map((movie: any) => (
+            {movies.map((movie: Movie) => (
               <MovieCard key={movie.imdbID} movie={movie} />
             ))}
           </div>

@@ -1,10 +1,11 @@
 "use client";
 
+import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { useState, useEffect } from "react";
 import MovieCard from "@/components/MovieCard";
 import Header2 from "@/components/Header2";
 import SearchBar from "@/components/SearchBar";
+import { Movie } from "@/types/movie";
 
 async function fetchSearchResults(query: string) {
     const res = await fetch(`https://www.omdbapi.com/?s=${query}&apikey=19fffcc4`);
@@ -12,11 +13,11 @@ async function fetchSearchResults(query: string) {
     return data.Search || [];
 }
 
-export default function SearchPage() {
+function SearchContent() {
     const searchParams = useSearchParams();
     const query = searchParams.get("query") || "";
-    const [movies, setMovies] = useState<any[]>([]);
-    const [loading, setLoading] = useState(false);
+    const [movies, setMovies] = useState<Movie[]>([]);
+    const [loading, setLoading] = useState<boolean>(false);
 
     useEffect(() => {
         if (query) {
@@ -29,16 +30,17 @@ export default function SearchPage() {
     }, [query]);
 
     return (
-
         <div className="min-h-screen bg-gray-900 text-white px-4 py-8">
             <Header2 />
             <div className="mt-10">
                 <SearchBar />
-
             </div>
 
             <h1 className="text-3xl mt-10 font-bold text-center text-red-500">
-                Résultats pour "{query}"
+                <h1 className="text-3xl mt-10 font-bold text-center text-red-500">
+                    Résultats pour &quot;{query}&quot;
+                </h1>
+
             </h1>
 
             {loading ? (
@@ -53,5 +55,13 @@ export default function SearchPage() {
                 <p className="text-center mt-6 text-gray-400">Aucun résultat trouvé</p>
             )}
         </div>
+    );
+}
+
+export default function SearchPage() {
+    return (
+        <Suspense fallback={<p>Loading...</p>}>
+            <SearchContent />
+        </Suspense>
     );
 }
